@@ -17,7 +17,7 @@ export default function Carousel() {
         centeredSlides={true}
         loop={true}
         autoplay={{
-          delay: 1000,
+          delay: 5000,
           disableOnInteraction: false,
         }}
         pagination={{
