@@ -1,17 +1,43 @@
 import { useContext } from 'react';
 import { CredContext } from '../../Providers/AuthProvider/CredProvider';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const { signInWithGoogle, signInWithEmailPass } = useContext(CredContext);
-
-  const handleLogin = event => {
+  const navigate = useNavigate();
+  //  Login  with email and passwrd   =>
+  const handleLogin = async event => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const formValues = Object.fromEntries(formData.entries());
-    signInWithEmailPass(formValues.email, formValues.password).catch(error =>
-      console.log(error)
-    );
+
+    try {
+      const resutl = await signInWithEmailPass(
+        formValues.email,
+        formValues.password
+      );
+      console.log(resutl);
+      toast.success('login successfull');
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.message);
+    }
+    finally{
+        event.target.reset(); 
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await signInWithGoogle();
+      toast.success('Signin Successful');
+      navigate('/');
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.message);
+    }
+    
   };
   return (
     <>
@@ -60,7 +86,7 @@ const Login = () => {
                 />
               </svg>
             </div>
-            <button onClick={signInWithGoogle}>
+            <button onClick={handleGoogleLogin}>
               <span className="px-4 py-3 font-bold text-center">
                 Sign in with Google
               </span>

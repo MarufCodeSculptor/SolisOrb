@@ -1,20 +1,34 @@
 import { useContext } from 'react';
 import { CredContext } from '../../Providers/AuthProvider/CredProvider';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const Registration = () => {
-  const { signInWithGoogle, createUser } = useContext(CredContext);
-  const handleRegister = event => {
+  const { signInWithGoogle, createUser, updateUserProfile, setUser, user } =
+    useContext(CredContext);
+  const navigate = useNavigate();
+  const handleRegister = async event => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const formValues = Object.fromEntries(formData.entries());
-    createUser(formValues.email, formValues.password)
-      .catch(error => {
-        console.log(error);
-      })
-      .finally(() => {
-        event.target.reset();
+    console.log(formValues);
+
+    try {
+      const result = await createUser(formValues.email, formValues.password);
+      console.log(result);
+      await updateUserProfile(formValues.name, formValues.photoUrl);
+
+      setUser({
+        ...user,
+        photoURL: formValues.photoUrl,
+        displayName: formValues.name,
       });
+      navigate('/');
+      toast.success('Register Success');
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.message);
+    }
   };
 
   return (
@@ -101,6 +115,22 @@ const Registration = () => {
                   name="email"
                   id="email"
                   placeholder="example@example.com"
+                  className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                />
+              </div>
+
+              <div className="mt-4">
+                <label
+                  htmlFor="password"
+                  className="block text-sm text-gray-800 dark:text-gray-200"
+                >
+                  Photo_Url
+                </label>
+                <input
+                  type="text"
+                  name="photoUrl"
+                  id="photoUrl"
+                  placeholder="photoUrl"
                   className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
               </div>

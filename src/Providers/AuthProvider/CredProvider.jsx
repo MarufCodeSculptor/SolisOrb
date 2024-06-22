@@ -6,6 +6,7 @@ import {
   signOut,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from 'firebase/auth';
 import { createContext, useEffect, useState } from 'react';
 import app from '../../Firebase/firebase.config';
@@ -33,12 +34,22 @@ const CredProvider = ({ children }) => {
   };
   // sing in in with existing user =>
   const signInWithEmailPass = (email, pass) => {
+    setLoading(true);
     return signInWithEmailAndPassword(auth, email, pass);
   };
   //  logout function =>
   const logOut = () => {
+    setLoading(true)
     return signOut(auth);
   };
+
+  const updateUserProfile = (name, photoLink) => {
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: photoLink,
+    });
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, currentUser => {
       setUser(currentUser);
@@ -55,7 +66,11 @@ const CredProvider = ({ children }) => {
     signInWithGoogle,
     createUser,
     logOut,
-    signInWithEmailPass
+    signInWithEmailPass,
+    updateUserProfile,
+    setUser,
+    loading
+    
   };
   return (
     <CredContext.Provider value={credValues}>{children}</CredContext.Provider>
