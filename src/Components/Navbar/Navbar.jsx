@@ -1,6 +1,10 @@
+import { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { CredContext } from '../../Providers/AuthProvider/CredProvider';
 
 const Navbar = () => {
+  const {logOut,user}=useContext(CredContext);
+  console.log(user);
   const links = (
     <>
       <li>
@@ -8,6 +12,9 @@ const Navbar = () => {
       </li>
       <li>
         <NavLink to="/products"> Products </NavLink>
+      </li>
+      <li>
+        <NavLink to="/login"> Login </NavLink>
       </li>
     </>
   );
@@ -58,7 +65,7 @@ const Navbar = () => {
               <div className="w-10 rounded-full">
                 <img
                   alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                  src=''
                 />
               </div>
             </div>
@@ -76,7 +83,7 @@ const Navbar = () => {
                 <a>Settings</a>
               </li>
               <li>
-                <a>Logout</a>
+                <button onClick={logOut} >log out</button>
               </li>
             </ul>
           </div>

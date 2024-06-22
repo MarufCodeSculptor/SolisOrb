@@ -1,7 +1,12 @@
-import { getAuth, onAuthStateChanged, signInWithPopup } from 'firebase/auth';
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut,
+} from 'firebase/auth';
 import { createContext, useEffect, useState } from 'react';
 import app from '../../Firebase/firebase.config';
-import { GoogleAuthProvider } from 'firebase/auth/web-extension';
 
 export const CredContext = createContext(null);
 
@@ -11,14 +16,20 @@ const googleProvider = new GoogleAuthProvider();
 // eslint-disable-next-line react/prop-types
 const CredProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   // Popup sign in with google is start here =>>
   const signInWithGoogle = () => {
     return signInWithPopup(auth, googleProvider);
   };
   // ///////
+  //  logout function =>
+  const logOut = () => {
+    return signOut(auth);
+  };
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, currentUser => {
       setUser(currentUser);
+      setLoading(false)
       console.log('CurrentUser-->', currentUser);
     });
     return () => {
@@ -28,7 +39,8 @@ const CredProvider = ({ children }) => {
 
   const credValues = {
     signInWithGoogle,
-    user
+    user,
+    logOut
   };
   return (
     <CredContext.Provider value={credValues}>{children}</CredContext.Provider>
