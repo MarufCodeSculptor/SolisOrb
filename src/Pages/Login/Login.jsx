@@ -3,17 +3,26 @@ import { CredContext } from '../../Providers/AuthProvider/CredProvider';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
-  const { signInWithGoogle} = useContext(CredContext);
-  
+  const { signInWithGoogle, signInWithEmailPass } = useContext(CredContext);
+
+  const handleLogin = event => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const formValues = Object.fromEntries(formData.entries());
+    signInWithEmailPass(formValues.email, formValues.password).catch(error =>
+      console.log(error)
+    );
+  };
   return (
     <>
-      <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl">
+      <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl my-12">
         <div
           className="hidden bg-cover lg:block lg:w-1/2"
           style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1606660265514-358ebbadc80d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1575&q=80')`,
           }}
         />
+
         <div className="w-full px-6 py-8 md:px-8 lg:w-1/2">
           <div className="flex justify-center mx-auto">
             <img
@@ -51,15 +60,16 @@ const Login = () => {
                 />
               </svg>
             </div>
-           <button onClick={signInWithGoogle}>
-           <span className="px-4 py-3 font-bold text-center">
-              Sign in with Google
-            </span>
-           </button>
+            <button onClick={signInWithGoogle}>
+              <span className="px-4 py-3 font-bold text-center">
+                Sign in with Google
+              </span>
+            </button>
           </a>
 
           <div className="mt-6">
-            <form>
+            {/*  form starting here =>  */}
+            <form onSubmit={handleLogin}>
               <div>
                 <label
                   htmlFor="email"
@@ -98,11 +108,11 @@ const Login = () => {
                 </button>
               </div>
             </form>
+            {/* forn ended here =>  */}
           </div>
 
           <p className="mt-8 text-xs font-light text-center text-gray-400">
-            {' '}
-            Don't have an account?{' '}
+            Don't have an account?
             <Link
               to={'/register'}
               className="font-medium text-gray-700 dark:text-gray-200 hover:underline"
