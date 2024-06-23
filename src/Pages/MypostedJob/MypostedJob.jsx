@@ -7,31 +7,29 @@ import toast from 'react-hot-toast';
 const MyPostedJobs = () => {
   const [myJobs, setMyJobs] = useState([]);
   const { user, loading } = useContext(CredContext);
-
+  //    data fetching function =>
+  const getData = async () => {
+    try {
+      const { data } = await server.get(`/jobs/${user?.email}`);
+      setMyJobs(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const { data } = await server.get(`/jobs/${user?.email}`);
-        console.log(data, 'data from try  method');
-        setMyJobs(data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
     getData();
-  }, [loading, user]);
+  }, [user, loading]);
 
   const handleDelete = async id => {
     try {
       const { data } = await server.delete(`/job/${id}`);
-      console.log(data);
       if (data.deletedCount > 0) {
-        const remaining = myJobs.filter(job => job._id !== id);
-        setMyJobs(remaining);
-        toast.success('deleted');
+        getData();
+        toast.success('deleted success');
       }
     } catch (err) {
       console.log(err);
+      toast.error(err?.message);
     }
   };
 
