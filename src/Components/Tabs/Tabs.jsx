@@ -1,8 +1,17 @@
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import JobCard from '../JobCard/JobCard';
+import { useEffect, useState } from 'react';
+
+import server from '../../Hooks/axioxSecure';
 
 const TheTabs = () => {
+  const [jobsData, setJobsData] = useState([]);
+  console.log(jobsData);
+  useEffect(() => {
+    server.get('/jobs').then(res => setJobsData(res.data));
+  }, []);
+
   return (
     <div className="mt-10">
       <div>
@@ -18,21 +27,39 @@ const TheTabs = () => {
       </div>
       <Tabs className="mt-10 min-h-96">
         <TabList>
-          <Tab>Web</Tab>
+          <Tab>Web developement</Tab>
           <Tab>Graphics</Tab>
           <Tab>Gigital Marketing</Tab>
         </TabList>
 
         <TabPanel>
-          <JobCard />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5">
+            {jobsData
+              .filter(j => j.category === 'web development')
+              .map(job => (
+                <JobCard key={job._id} job={job} />
+              ))}
+          </div>
         </TabPanel>
 
         <TabPanel>
-          <JobCard />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5">
+            {jobsData
+              .filter(j => j.category === 'graphics design')
+              .map(job => (
+                <JobCard key={job._id} job={job} />
+              ))}
+          </div>
         </TabPanel>
 
         <TabPanel>
-          <JobCard />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5">
+            {jobsData
+              .filter(j => j.category === 'digital marketing')
+              .map(job => (
+                <JobCard key={job._id} job={job} />
+              ))}
+          </div>
         </TabPanel>
       </Tabs>
     </div>
