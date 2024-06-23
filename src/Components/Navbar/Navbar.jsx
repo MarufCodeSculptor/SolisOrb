@@ -54,7 +54,7 @@ const Navbar = () => {
         </div>
         <div className="navbar-end">
           {user ? (
-            <div className="dropdown dropdown-end">
+            <div className="dropdown dropdown-end relative z-50">
               <div
                 tabIndex="0"
                 role="button"
@@ -80,7 +80,7 @@ const Navbar = () => {
                   </a>
                 </li>
                 <li>
-                  <a>Settings</a>
+                  <Link to='/addJobs'> Add jobs</Link>
                 </li>
                 <li>
                   <button onClick={logOut}>log out</button>

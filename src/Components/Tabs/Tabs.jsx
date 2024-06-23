@@ -40,7 +40,7 @@ const TheTabs = () => {
         <TabPanel>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5">
             {jobsData
-              .filter(j => j.category === 'web development')
+              .filter(j => j.category.toLowerCase() === 'web development')
               .map(job => (
                 <JobCard key={job._id} job={job} />
               ))}
@@ -50,7 +50,7 @@ const TheTabs = () => {
         <TabPanel>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5">
             {jobsData
-              .filter(j => j.category === 'graphics design')
+              .filter(j => j.category.toLowerCase() === 'graphics design')
               .map(job => (
                 <JobCard key={job._id} job={job} />
               ))}
@@ -60,7 +60,7 @@ const TheTabs = () => {
         <TabPanel>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5">
             {jobsData
-              .filter(j => j.category === 'digital marketing')
+              .filter(j => j.category.toLowerCase() === 'digital marketing')
               .map(job => (
                 <JobCard key={job._id} job={job} />
               ))}

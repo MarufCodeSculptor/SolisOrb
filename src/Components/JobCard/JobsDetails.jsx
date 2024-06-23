@@ -4,12 +4,13 @@ import { CredContext } from '../../Providers/AuthProvider/CredProvider';
 import server from '../../Hooks/axioxSecure';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import toast from 'react-hot-toast';
 
 const JobDetails = () => {
   const { user } = useContext(CredContext);
   const [startDate, setStartDate] = useState(new Date());
   const {
-    buyer_email,
+    buyer,
     category,
     deadline,
     description,
@@ -18,31 +19,40 @@ const JobDetails = () => {
     min_price,
     _id,
   } = useLoaderData();
+  console.log(buyer);
   //   submitting form =>
   const hanleFormSubmition = async event => {
     event.preventDefault();
+
     const formData = new FormData(event.target);
     const formValues = Object.fromEntries(formData.entries());
+
     const userEmail = user?.email;
-    const jodID = _id;
+    const job_id = _id;
     const price = parseFloat(formValues.price);
-    const buyerEmail = buyer_email;
+    if (price < parseInt(min_price) && price === 'NaN')
+      return toast.error('Offer more or at least equal to Minimum Price');
+    const buyer_email=buyer.email;
     const status = 'pending';
 
     const bidData = {
       ...formValues,
-      jodID,
+      job_id,
       userEmail,
       price,
-      buyerEmail,
       status,
       startDate,
+      buyer_email
     };
     console.table(bidData);
 
     try {
       const response = await server.post('/bids', bidData);
       console.log(response.data);
+      if (response.data.acknowledged) {
+        toast.success('Data Posted');
+        event.target.reset();
+      }
     } catch (err) {
       console.log(err);
     }
@@ -52,7 +62,7 @@ const JobDetails = () => {
       {/* Job Details */}
       <div className="flex-1  px-4 py-7 bg-white rounded-md shadow-md md:min-h-[350px]">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-light text-gray-800 ">{deadline}</span>
+          <span className="text-sm font-light text-gray-800 "> Deadline  {new Date(deadline).toLocaleDateString()}</span>
           <span className="px-4 py-1 text-xs text-blue-800 uppercase bg-blue-200 rounded-full ">
             {category}
           </span>
@@ -67,17 +77,23 @@ const JobDetails = () => {
           <p className="mt-6 text-sm font-bold text-gray-600 ">
             Buyer Details:
           </p>
+
+
+
           <div className="flex items-center gap-5">
             <div>
-              <p className="mt-2 text-sm  text-gray-600 ">Name: Jhankar Vai.</p>
+              <p className="mt-2 text-sm  text-gray-600 ">Name: {buyer.name}</p>
               <p className="mt-2 text-sm  text-gray-600 ">
-                Email: <span> {buyer_email} </span>
+                Email: {buyer.email}
               </p>
             </div>
             <div className="rounded-full object-cover overflow-hidden w-14 h-14">
-              <img src="" alt="" />
+              <img src={buyer.photoUrl} alt="" />
             </div>
           </div>
+
+
+
           <p className="mt-6 text-lg font-bold text-gray-600 ">
             Range: <span>${min_price} </span> <span>${max_price} </span>
           </p>

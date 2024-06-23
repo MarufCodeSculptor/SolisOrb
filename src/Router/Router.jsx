@@ -5,12 +5,14 @@ import Registration from '../Pages/Registration/Registration';
 import Home from '../Pages/Home/Home';
 import JobDetails from '../Components/JobCard/JobsDetails';
 import getJob from '../Hooks/getJob';
+import AddJobs from '../Pages/AddJobs/AddJobs';
+import ErrorPage from '../Pages/NotFound/ErrorPage';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
-    errorElement: <h3> page not found </h3>,
+    errorElement:<ErrorPage></ErrorPage>,
     children: [
       {
         path: '/',
@@ -28,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: '/register',
         element: <Registration></Registration>,
+      },
+      {
+        path: '/addJobs',
+        element:<AddJobs></AddJobs>,
       },
     ],
   },
