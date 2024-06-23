@@ -9,7 +9,12 @@ const TheTabs = () => {
   const [jobsData, setJobsData] = useState([]);
   console.log(jobsData);
   useEffect(() => {
-    server.get('/jobs').then(res => setJobsData(res.data));
+    const getData = async () => {
+      const { data } = await server.get('/jobs');
+      console.log('jobs data successfully fetched', data);
+      setJobsData(data);
+    };
+    getData();
   }, []);
 
   return (
