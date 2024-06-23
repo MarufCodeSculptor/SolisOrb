@@ -23,6 +23,7 @@ const JobDetails = () => {
   //   submitting form =>
   const hanleFormSubmition = async event => {
     event.preventDefault();
+    if(user?.email===buyer?.email) return toast.error('not permited')
 
     const formData = new FormData(event.target);
     const formValues = Object.fromEntries(formData.entries());

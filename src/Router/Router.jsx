@@ -7,6 +7,7 @@ import JobDetails from '../Components/JobCard/JobsDetails';
 import getJob from '../Hooks/getJob';
 import AddJobs from '../Pages/AddJobs/AddJobs';
 import ErrorPage from '../Pages/NotFound/ErrorPage';
+import MyPostedJobs from '../Pages/MypostedJob/MypostedJob';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,11 @@ const router = createBrowserRouter([
         path: '/addJobs',
         element:<AddJobs></AddJobs>,
       },
+      {
+        path: '/my-posted-jobs',
+        element:<MyPostedJobs></MyPostedJobs>,
+      },
+      
     ],
   },
 ]);
