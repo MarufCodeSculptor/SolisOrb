@@ -1,11 +1,15 @@
 import { useContext } from 'react';
 import { CredContext } from '../../Providers/AuthProvider/CredProvider';
-import { Link, useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import toast, { LoaderIcon } from 'react-hot-toast';
 
 const Registration = () => {
   const { signInWithGoogle, createUser, updateUserProfile, setUser, user } =
     useContext(CredContext);
+
+  const location = useLocation();
+  const form = location.state || '/';
+
   const navigate = useNavigate();
   const handleRegister = async event => {
     event.preventDefault();
@@ -23,7 +27,7 @@ const Registration = () => {
         photoURL: formValues.photoUrl,
         displayName: formValues.name,
       });
-      navigate('/');
+      navigate(form,{replace:true})
       toast.success('Register Success');
     } catch (err) {
       console.log(err);

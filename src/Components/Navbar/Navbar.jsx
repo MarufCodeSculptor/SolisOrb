@@ -4,15 +4,17 @@ import { CredContext } from '../../Providers/AuthProvider/CredProvider';
 
 const Navbar = () => {
   const { logOut, user } = useContext(CredContext);
-  console.log(user, 'photourl');
+
   const links = (
     <>
       <li>
         <NavLink to="/"> Home </NavLink>
       </li>
-      <li>
-        <NavLink to="/login"> Login </NavLink>
-      </li>
+      {!user && (
+        <li>
+          <NavLink to="/login"> Login </NavLink>
+        </li>
+      )}
     </>
   );
   return (
@@ -74,10 +76,16 @@ const Navbar = () => {
                 className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
               >
                 <li>
-                 <Link to='my-posted-jobs'> My Posted Jobs</Link>
+                  <Link to="my-posted-jobs"> My Posted Jobs</Link>
                 </li>
                 <li>
-                  <Link to='/addJobs'> Add jobs</Link>
+                  <Link to="/addJobs"> Add jobs</Link>
+                </li>
+                <li>
+                  <Link to="/my-bids"> My Bids </Link>
+                </li>
+                <li>
+                  <Link to="/bid-request"> Bid  Request  </Link>
                 </li>
                 <li>
                   <button onClick={logOut}>log out</button>

@@ -1,11 +1,15 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { CredContext } from '../../Providers/AuthProvider/CredProvider';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const Login = () => {
-  const { signInWithGoogle, signInWithEmailPass } = useContext(CredContext);
+  const { signInWithGoogle, signInWithEmailPass, user, loading } =
+    useContext(CredContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const form = location.state || '/';
+
   //  Login  with email and passwrd   =>
   const handleLogin = async event => {
     event.preventDefault();
@@ -19,26 +23,33 @@ const Login = () => {
       );
       console.log(resutl);
       toast.success('login successfull');
+      navigate(form, { replace: true });
     } catch (err) {
       console.log(err);
       toast.error(err?.message);
-    }
-    finally{
-        event.target.reset(); 
+    } finally {
+      event.target.reset();
     }
   };
-
+  // SIGN IN WITH GOOGLE =>
   const handleGoogleLogin = async () => {
     try {
       await signInWithGoogle();
       toast.success('Signin Successful');
-      navigate('/');
+      navigate(form, { replace: true });
     } catch (err) {
       console.log(err);
       toast.error(err?.message);
     }
-    
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [navigate, user]);
+
+  if(user || loading ) return ; 
   return (
     <>
       <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl my-12">

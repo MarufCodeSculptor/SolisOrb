@@ -19,33 +19,31 @@ const JobDetails = () => {
     min_price,
     _id,
   } = useLoaderData();
-  console.log(buyer);
+
   //   submitting form =>
   const hanleFormSubmition = async event => {
     event.preventDefault();
-    if(user?.email===buyer?.email) return toast.error('not permited')
+    if (user?.email === buyer?.email) return toast.error('not permited');
 
-    const formData = new FormData(event.target);
-    const formValues = Object.fromEntries(formData.entries());
-
-    const userEmail = user?.email;
-    const job_id = _id;
-    const price = parseFloat(formValues.price);
-    if (price < parseInt(min_price) && price === 'NaN')
-      return toast.error('Offer more or at least equal to Minimum Price');
-    const buyer_email=buyer.email;
+    const form = event.target;
+    const jobId = _id;
+    const price = parseInt(form.price.value);
+    const deadline = startDate;
+    const comment = form.comment.valuel;
+    const email = user?.email;
     const status = 'pending';
-
     const bidData = {
-      ...formValues,
-      job_id,
-      userEmail,
+      jobId,
       price,
+      deadline,
+      comment,
+      job_title,
+      category,
+      email,
+      buyer_email: buyer?.email,
       status,
-      startDate,
-      buyer_email
+      buyer,
     };
-    console.table(bidData);
 
     try {
       const response = await server.post('/bids', bidData);
@@ -58,12 +56,16 @@ const JobDetails = () => {
       console.log(err);
     }
   };
+
   return (
     <div className="flex flex-col md:flex-row justify-around gap-5  items-center min-h-[calc(100vh-306px)] md:max-w-screen-xl mx-auto ">
       {/* Job Details */}
       <div className="flex-1  px-4 py-7 bg-white rounded-md shadow-md md:min-h-[350px]">
         <div className="flex items-center justify-between">
-          <span className="text-sm font-light text-gray-800 "> Deadline  {new Date(deadline).toLocaleDateString()}</span>
+          <span className="text-sm font-light text-gray-800 ">
+            {' '}
+            Deadline {new Date(deadline).toLocaleDateString()}
+          </span>
           <span className="px-4 py-1 text-xs text-blue-800 uppercase bg-blue-200 rounded-full ">
             {category}
           </span>
@@ -79,8 +81,6 @@ const JobDetails = () => {
             Buyer Details:
           </p>
 
-
-
           <div className="flex items-center gap-5">
             <div>
               <p className="mt-2 text-sm  text-gray-600 ">Name: {buyer.name}</p>
@@ -92,8 +92,6 @@ const JobDetails = () => {
               <img src={buyer.photoUrl} alt="" />
             </div>
           </div>
-
-
 
           <p className="mt-6 text-lg font-bold text-gray-600 ">
             Range: <span>${min_price} </span> <span>${max_price} </span>

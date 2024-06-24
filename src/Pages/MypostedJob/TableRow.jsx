@@ -1,8 +1,12 @@
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
-const TableRow = ({ job,handleDelete}) => {
+const TableRow = ({ job, handleDelete }) => {
+  const navigate = useNavigate();
   const { _id } = job;
-
+  const handleUpdate = () => {
+    navigate(`/update-job/${_id}`);
+  };
 
   return (
     <tr>
@@ -38,7 +42,10 @@ const TableRow = ({ job,handleDelete}) => {
 
       <td className="px-4 py-4 text-sm whitespace-nowrap">
         <div className="flex items-center gap-x-6">
-          <button onClick={()=>handleDelete(_id)} className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none">
+          <button
+            onClick={() => handleDelete(_id)}
+            className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -55,7 +62,7 @@ const TableRow = ({ job,handleDelete}) => {
             </svg>
           </button>
 
-          <button className="text-gray-500 transition-colors duration-200   hover:text-yellow-500 focus:outline-none">
+          <button onClick={handleUpdate} className="text-gray-500 transition-colors duration-200   hover:text-yellow-500 focus:outline-none">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -78,6 +85,6 @@ const TableRow = ({ job,handleDelete}) => {
 };
 TableRow.propTypes = {
   job: PropTypes.object.isRequired,
-  handleDelete:PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
 };
 export default TableRow;
