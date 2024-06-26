@@ -33,7 +33,7 @@ const AddJobs = () => {
     console.log(jobData);
 
     try {
-      const { data } = await server.post('/jobs', jobData);
+      const { data } = await server().post('/jobs', jobData);
       if (data.insertedId) {
         toast.success('Success');
         navigate('/');

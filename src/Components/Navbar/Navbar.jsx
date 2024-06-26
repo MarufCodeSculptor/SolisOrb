@@ -8,7 +8,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await logOut();
-      const { data } = await server.get(`/logout`, { withCredentials: true });
+      const { data } = await server().get(`/logout`, { withCredentials: true });
       console.log(data);
       toast.success('log out success');
     } catch (err) {

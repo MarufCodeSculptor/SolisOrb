@@ -11,7 +11,7 @@ const MyBids = () => {
 
   //  data  fetching func =->
   const getData = async () => {
-    const { data } = await server.get(`my-bids/${user?.email}`);
+    const { data } = await server().get(`my-bids/${user?.email}`);
     setBids(data);
   };
 

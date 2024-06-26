@@ -80,7 +80,7 @@ const router = createBrowserRouter([
             <UpdateJob />
           </PrivateRoute>
         ),
-        loader: ({ params }) => server.get(`/job/${params.id}`),
+        loader: ({ params }) => server().get(`/job/${params.id}`),
       },
     ],
   },

@@ -7,7 +7,7 @@ const BidRequests = () => {
   const { user } = useContext(CredContext);
   const [bidRequests, setBidRequest] = useState([]);
   const getData = async () => {
-    const { data } = await server.get(`bid-request/${user?.email}`);
+    const { data } = await server().get(`bid-request/${user?.email}`);
     setBidRequest(data);
   };
 

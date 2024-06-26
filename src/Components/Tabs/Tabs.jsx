@@ -2,15 +2,15 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import JobCard from '../JobCard/JobCard';
 import { useEffect, useState } from 'react';
-
 import server from '../../Hooks/axioxSecure';
+console.log(server);
 
 const TheTabs = () => {
   const [jobsData, setJobsData] = useState([]);
   console.log(jobsData);
   useEffect(() => {
     const getData = async () => {
-      const { data } = await server.get('/jobs',{withCredentials:true});
+      const { data } = await server().get('/jobs');
       console.log('jobs data successfully fetched', data);
       setJobsData(data);
     };

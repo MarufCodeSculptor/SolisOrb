@@ -6,7 +6,7 @@ const MybidsCard = ({ bid, getData }) => {
   const handleComplete = async (id, prevStatus, status) => {
     if (prevStatus === 'In Progress') {
       try {
-        const { data } = await server.patch(`/bid-seller/${id}`, { status });
+        const { data } = await server().patch(`/bid-seller/${id}`, { status });
         if (data.modifiedCount) {
           getData();
           toast.success('Done !');

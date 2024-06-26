@@ -15,7 +15,7 @@ const BidRequestCard = ({ request, getData }) => {
     }
 
     try {
-      const { data } = await server.patch(`/bid-buyer/${id}`, { status });
+      const { data } = await server().patch(`/bid-buyer/${id}`, { status });
       console.log(data);
       if (data.modifiedCount) {
         getData();

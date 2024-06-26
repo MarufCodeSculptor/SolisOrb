@@ -47,7 +47,7 @@ const JobDetails = () => {
     };
 
     try {
-      const response = await server.post('/bids', bidData);
+      const response = await server().post('/bids', bidData);
       console.log(response.data);
       if (response.data.acknowledged) {
         toast.success('bidding successfull');

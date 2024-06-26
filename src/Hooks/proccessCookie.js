@@ -3,7 +3,7 @@ import server from "./axioxSecure";
  const proccessCookie= async (user)=>{
      if (user.accessToken) {
           try {
-            const { data } = await server.post(
+            const { data } = await server().post(
               `/user`,
               { email: user?.email },
               {

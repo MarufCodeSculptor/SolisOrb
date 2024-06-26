@@ -42,7 +42,7 @@ const UpdateJob = () => {
     };
     //  sending update request to server =>
     try {
-      const { data } = await server.put(`/job/${_id}`, updatedData);
+      const { data } = await server().put(`/job/${_id}`, updatedData);
       console.log(data);
       if(data.modifiedCount>0){
         toast.success('update success');
