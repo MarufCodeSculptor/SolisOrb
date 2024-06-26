@@ -6,12 +6,12 @@ import BidRequestCard from './BidRequestCard';
 const BidRequests = () => {
   const { user } = useContext(CredContext);
   const [bidRequests, setBidRequest] = useState([]);
+  const getData = async () => {
+    const { data } = await server.get(`bid-request/${user?.email}`);
+    setBidRequest(data);
+  };
 
   useEffect(() => {
-    const getData = async () => {
-      const { data } = await server.get(`bid-request/${user?.email}`);
-      setBidRequest(data);
-    };
     getData();
   }, []);
 
@@ -21,7 +21,7 @@ const BidRequests = () => {
         <h2 className="text-lg font-medium text-gray-800 ">Bid Requests</h2>
 
         <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full ">
-          05 Requests
+          {bidRequests.length} Requests
         </span>
       </div>
 
@@ -89,6 +89,7 @@ const BidRequests = () => {
                     <BidRequestCard
                       key={request._id}
                       request={request}
+                      getData={getData}
                     ></BidRequestCard>
                   ))}
                 </tbody>

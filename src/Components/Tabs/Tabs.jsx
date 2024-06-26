@@ -10,7 +10,7 @@ const TheTabs = () => {
   console.log(jobsData);
   useEffect(() => {
     const getData = async () => {
-      const { data } = await server.get('/jobs');
+      const { data } = await server.get('/jobs',{withCredentials:true});
       console.log('jobs data successfully fetched', data);
       setJobsData(data);
     };

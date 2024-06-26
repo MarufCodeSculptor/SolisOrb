@@ -39,7 +39,7 @@ const CredProvider = ({ children }) => {
   };
   //  logout function =>
   const logOut = () => {
-    setLoading(true)
+    setLoading(true);
     return signOut(auth);
   };
 
@@ -54,6 +54,7 @@ const CredProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, currentUser => {
       setUser(currentUser);
       setLoading(false);
+
       console.log('CurrentUser-->', currentUser);
     });
     return () => {
@@ -69,8 +70,7 @@ const CredProvider = ({ children }) => {
     signInWithEmailPass,
     updateUserProfile,
     setUser,
-    loading
-    
+    loading,
   };
   return (
     <CredContext.Provider value={credValues}>{children}</CredContext.Provider>

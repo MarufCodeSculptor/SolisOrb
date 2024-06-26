@@ -1,9 +1,20 @@
 import { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { CredContext } from '../../Providers/AuthProvider/CredProvider';
-
+import server from '../../Hooks/axioxSecure';
+import toast from 'react-hot-toast';
 const Navbar = () => {
   const { logOut, user } = useContext(CredContext);
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      const { data } = await server.get(`/logout`, { withCredentials: true });
+      console.log(data);
+      toast.success('log out success');
+    } catch (err) {
+      console.log(err?.message);
+    }
+  };
 
   const links = (
     <>
@@ -85,10 +96,10 @@ const Navbar = () => {
                   <Link to="/my-bids"> My Bids </Link>
                 </li>
                 <li>
-                  <Link to="/bid-request"> Bid  Request  </Link>
+                  <Link to="/bid-request"> Bid Request </Link>
                 </li>
                 <li>
-                  <button onClick={logOut}>log out</button>
+                  <button onClick={() => handleLogout()}>log out</button>
                 </li>
               </ul>
             </div>

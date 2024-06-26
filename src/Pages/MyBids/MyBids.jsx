@@ -1,17 +1,21 @@
-import { useContext, useEffect, useState } from 'react';
+import {useEffect, useState } from 'react';
 import server from '../../Hooks/axioxSecure';
-import { CredContext } from '../../Providers/AuthProvider/CredProvider';
 import MybidsCard from './MybidsCard';
+import useAuth from '../../Hooks/useAuth';
 
 const MyBids = () => {
-  const { user } = useContext(CredContext);
+  // const { user } = useContext(CredContext);
+  const {user}=useAuth();
+  console.log('coming from my bid',user);
   const [bids, setBids] = useState([]);
-  console.log(bids,'the bids');
+
+  //  data  fetching func =->
+  const getData = async () => {
+    const { data } = await server.get(`my-bids/${user?.email}`);
+    setBids(data);
+  };
+
   useEffect(() => {
-    const getData = async () => {
-      const {data} = await server.get(`my-bids/${user?.email}`);
-      setBids(data)
-    };
     getData();
   }, []);
 
@@ -76,7 +80,13 @@ const MyBids = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 ">
-                {bids.map(bid=> <MybidsCard key={bid._id}  bid={bid} ></MybidsCard>)}
+                  {bids.map(bid => (
+                    <MybidsCard
+                      key={bid._id}
+                      bid={bid}
+                      getData={getData}
+                    ></MybidsCard>
+                  ))}
                 </tbody>
               </table>
             </div>

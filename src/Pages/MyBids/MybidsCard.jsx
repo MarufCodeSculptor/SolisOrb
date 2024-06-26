@@ -1,6 +1,23 @@
 import PropTypes from 'prop-types';
-const MybidsCard = ({ bid }) => {
-  const { price, deadline, job_title, category, status } = bid;
+import server from '../../Hooks/axioxSecure';
+import toast from 'react-hot-toast';
+const MybidsCard = ({ bid, getData }) => {
+  const { price, deadline, job_title, category, status, _id } = bid;
+  const handleComplete = async (id, prevStatus, status) => {
+    if (prevStatus === 'In Progress') {
+      try {
+        const { data } = await server.patch(`/bid-seller/${id}`, { status });
+        if (data.modifiedCount) {
+          getData();
+          toast.success('Done !');
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      toast.error(`Not Permited`);
+    }
+  };
 
   return (
     <tr>
@@ -39,6 +56,8 @@ const MybidsCard = ({ bid }) => {
       </td>
       <td className="px-4 py-4 text-sm whitespace-nowrap">
         <button
+          disabled={status !== 'In Progress'}
+          onClick={() => handleComplete(_id, status, 'Complete')}
           title="Mark Complete"
           className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none disabled:cursor-not-allowed"
         >
@@ -63,5 +82,6 @@ const MybidsCard = ({ bid }) => {
 };
 MybidsCard.propTypes = {
   bid: PropTypes.object.isRequired,
+  getData: PropTypes.func.isRequired,
 };
 export default MybidsCard;

@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import { CredContext } from '../../Providers/AuthProvider/CredProvider';
 import server from '../../Hooks/axioxSecure';
 import DatePicker from 'react-datepicker';
@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 const JobDetails = () => {
   const { user } = useContext(CredContext);
   const [startDate, setStartDate] = useState(new Date());
+  const navigate = useNavigate();
   const {
     buyer,
     category,
@@ -49,7 +50,8 @@ const JobDetails = () => {
       const response = await server.post('/bids', bidData);
       console.log(response.data);
       if (response.data.acknowledged) {
-        toast.success('Data Posted');
+        toast.success('bidding successfull');
+        navigate('/my-bids');
         event.target.reset();
       }
     } catch (err) {

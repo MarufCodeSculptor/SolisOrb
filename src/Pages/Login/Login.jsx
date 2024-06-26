@@ -2,6 +2,8 @@ import { useContext, useEffect } from 'react';
 import { CredContext } from '../../Providers/AuthProvider/CredProvider';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import proccessCookie from '../../Hooks/proccessCookie';
+
 
 const Login = () => {
   const { signInWithGoogle, signInWithEmailPass, user, loading } =
@@ -17,11 +19,13 @@ const Login = () => {
     const formValues = Object.fromEntries(formData.entries());
 
     try {
-      const resutl = await signInWithEmailPass(
+      const { user } = await signInWithEmailPass(
         formValues.email,
         formValues.password
       );
-      console.log(resutl);
+
+      proccessCookie(user);
+
       toast.success('login successfull');
       navigate(form, { replace: true });
     } catch (err) {
@@ -34,9 +38,10 @@ const Login = () => {
   // SIGN IN WITH GOOGLE =>
   const handleGoogleLogin = async () => {
     try {
-      await signInWithGoogle();
+      const result = await signInWithGoogle();
       toast.success('Signin Successful');
       navigate(form, { replace: true });
+      proccessCookie(result?.user);
     } catch (err) {
       console.log(err);
       toast.error(err?.message);
@@ -49,7 +54,7 @@ const Login = () => {
     }
   }, [navigate, user]);
 
-  if(user || loading ) return ; 
+  if (user || loading) return;
   return (
     <>
       <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl my-12">

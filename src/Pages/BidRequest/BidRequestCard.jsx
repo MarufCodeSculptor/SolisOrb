@@ -1,6 +1,32 @@
 import PropTypes from 'prop-types';
-const BidRequestCard = ({ request }) => {
-  const { job_title, email, deadline, price, category, status } = request;
+import server from '../../Hooks/axioxSecure';
+import toast from 'react-hot-toast';
+const BidRequestCard = ({ request, getData }) => {
+  const { job_title, email, deadline, price, category, status, _id } = request;
+
+  const handleStatus = async (id, prevStatus, status) => {
+    console.log(id, prevStatus, status);
+   
+    if( prevStatus ==='Rejected'){
+      return toast.error('You cannot accept to rejected one ')
+    }
+    if (prevStatus === status) {
+      return toast.error('No change in status.');
+    }
+
+    try {
+      const { data } = await server.patch(`/bid-buyer/${id}`, { status });
+      console.log(data);
+      if (data.modifiedCount) {
+        getData();
+        toast.success(`Success! A new document was updated`);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.message);
+    }
+  };
+
   return (
     <tr>
       <td className="px-4 py-4 text-sm text-gray-500  whitespace-nowrap">
@@ -35,7 +61,11 @@ const BidRequestCard = ({ request }) => {
       </td>
       <td className="px-4 py-4 text-sm whitespace-nowrap">
         <div className="flex items-center gap-x-6">
-          <button className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none">
+          {/* the accept button  */}
+          <button
+            onClick={() => handleStatus(_id, status, 'In Progress')}
+            className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -51,8 +81,11 @@ const BidRequestCard = ({ request }) => {
               />
             </svg>
           </button>
-
-          <button className="text-gray-500 transition-colors duration-200   hover:text-yellow-500 focus:outline-none">
+          {/*  the decline button  */}
+          <button
+            onClick={() => handleStatus(_id, status, 'Rejected')}
+            className="text-gray-500 transition-colors duration-200   hover:text-yellow-500 focus:outline-none"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -76,6 +109,7 @@ const BidRequestCard = ({ request }) => {
 
 BidRequestCard.propTypes = {
   request: PropTypes.object.isRequired,
+  getData: PropTypes.func.isRequired,
 };
 
 export default BidRequestCard;

@@ -1,34 +1,36 @@
 import { useContext } from 'react';
 import { CredContext } from '../../Providers/AuthProvider/CredProvider';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import toast, { LoaderIcon } from 'react-hot-toast';
+import toast from 'react-hot-toast';
+import proccessCookie from '../../Hooks/proccessCookie';
 
 const Registration = () => {
-  const { signInWithGoogle, createUser, updateUserProfile, setUser, user } =
+  const { signInWithGoogle, createUser, updateUserProfile, setUser } =
     useContext(CredContext);
 
   const location = useLocation();
   const form = location.state || '/';
 
   const navigate = useNavigate();
+
   const handleRegister = async event => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const formValues = Object.fromEntries(formData.entries());
-    console.log(formValues);
 
     try {
       const result = await createUser(formValues.email, formValues.password);
-      console.log(result);
       await updateUserProfile(formValues.name, formValues.photoUrl);
 
       setUser({
-        ...user,
+        ...result?.user,
         photoURL: formValues.photoUrl,
         displayName: formValues.name,
       });
-      navigate(form,{replace:true})
+      proccessCookie(result?.user)
+      navigate(form, { replace: true });
       toast.success('Register Success');
+
     } catch (err) {
       console.log(err);
       toast.error(err?.message);

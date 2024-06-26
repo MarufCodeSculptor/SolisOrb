@@ -10,10 +10,11 @@ const MyPostedJobs = () => {
   //    data fetching function =>
   const getData = async () => {
     try {
-      const { data } = await server.get(`/jobs/${user?.email}`);
+      const { data } = await server.get(`/jobs/${user?.email}`,{withCredentials:true});
       setMyJobs(data);
     } catch (err) {
-      console.log(err);
+      console.log(err.response.data);
+      toast.error(err.response.data)
     }
   };
   useEffect(() => {
