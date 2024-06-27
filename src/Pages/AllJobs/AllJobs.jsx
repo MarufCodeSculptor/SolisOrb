@@ -4,7 +4,6 @@ import JobCard from '../../Components/JobCard/JobCard';
 
 const AllJobs = () => {
   const axiosSecure = useAxiosSecure();
-  const pages = [1, 2, 3, 4, 5, 6];
 
   const getJobsAndCount = async () => {
     try {
@@ -17,12 +16,11 @@ const AllJobs = () => {
       return error;
     }
   };
-//  tanstack query fetching data => => => 
+  //  tanstack query fetching data => => =>
   const { data, isLoading } = useQuery({
     queryFn: getJobsAndCount,
     queryKey: ['JobsAndCount'],
   });
-
   if (isLoading) {
     return (
       <>
@@ -32,6 +30,17 @@ const AllJobs = () => {
       </>
     );
   }
+ 
+
+  
+
+ 
+
+  const pageCountNumbers = Math.ceil(data.counts.count / 6);
+  const pageCountArray = [...Array(pageCountNumbers).keys()];
+
+
+  
   return (
     <div className="container px-6 py-10 mx-auto min-h-[calc(100vh-306px)] flex flex-col justify-between">
       <div>
@@ -107,12 +116,12 @@ const AllJobs = () => {
           </div>
         </button>
 
-        {pages.map(btnNum => (
+        {pageCountArray.map(btnNum => (
           <button
             key={btnNum}
             className={`hidden px-4 py-2 mx-1 transition-colors duration-300 transform  rounded-md sm:inline hover:bg-blue-500  hover:text-white`}
           >
-            {btnNum}
+            {btnNum + 1}
           </button>
         ))}
 
