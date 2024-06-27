@@ -15,7 +15,7 @@ const MyBids = () => {
   const getData = async () => {
     const { data } = await axiosSecure.get(`my-bids/${user?.email}`);
     setBids(data);
-  };
+  }
 
   useEffect(() => {
     getData();

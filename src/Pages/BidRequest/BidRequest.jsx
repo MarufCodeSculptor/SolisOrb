@@ -6,7 +6,11 @@ import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
 
 const BidRequests = () => {
+  const axiosSecure = useAxiosSecure();
   const { user } = useContext(CredContext);
+
+
+
   const { data, isLoading } = useQuery({
     queryFn: () => getData(),
     queryKey: ['bids'],
@@ -14,9 +18,10 @@ const BidRequests = () => {
       console.log('data fetched successfully');
     },
   });
-  console.log(data, 'from react query', isLoading);
 
-  const axiosSecure = useAxiosSecure();
+
+  
+
 
   const getData = async () => {
     const { data } = await axiosSecure.get(`bid-request/${user?.email}`);
