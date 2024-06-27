@@ -10,7 +10,7 @@ const BidRequestCard = ({ request}) => {
   /* 
   requirement for implementing useMutations for data muting or updating =>
     have to import useMutation and useQueryClient 
-  */
+  */  
   const queryClient = useQueryClient();
   const { mutateAsync } = useMutation({
     mutationFn: async ({ id, status }) => {

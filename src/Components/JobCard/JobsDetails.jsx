@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 const JobDetails = () => {
-  const axiosSecure=useAxiosSecure()
+  const axiosSecure = useAxiosSecure();
   const { user } = useContext(CredContext);
   const [startDate, setStartDate] = useState(new Date());
   const navigate = useNavigate();
@@ -43,21 +43,26 @@ const JobDetails = () => {
       job_title,
       category,
       email,
-      buyer_email: buyer?.email,
+      buyer_email:buyer?.email,
       status,
       buyer,
     };
 
     try {
-      const response = await axiosSecure.post('/bids', bidData);
-      console.log(response.data);
-      if (response.data.acknowledged) {
+      const {data} = await axiosSecure.post('/bids', bidData);
+      console.log('log from bid posting requers => ', data);
+      if (data?.acknowledged) {
         toast.success('bidding successfull');
         navigate('/my-bids');
         event.target.reset();
       }
     } catch (err) {
       console.log(err);
+      toast.error(err?.response.data);
+      
+    }
+    finally{
+      navigate('/my-bids')
     }
   };
 

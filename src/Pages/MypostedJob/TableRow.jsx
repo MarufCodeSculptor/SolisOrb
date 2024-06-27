@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 
 const TableRow = ({ job, handleDelete }) => {
+  const {job_title,deadline,min_price,max_price,category,description}=job;
   const navigate = useNavigate();
   const { _id } = job;
   const handleUpdate = () => {
@@ -11,15 +12,15 @@ const TableRow = ({ job, handleDelete }) => {
   return (
     <tr>
       <td className="px-4 py-4 text-sm text-gray-500  whitespace-nowrap">
-        Build Dynamic Website
+       {job_title}
       </td>
 
       <td className="px-4 py-4 text-sm text-gray-500  whitespace-nowrap">
-        10/04/2024
+       {new Date(deadline).toLocaleDateString()}
       </td>
 
       <td className="px-4 py-4 text-sm text-gray-500  whitespace-nowrap">
-        $100-$200
+        ${min_price}-${max_price}
       </td>
 
       <td className="px-4 py-4 text-sm whitespace-nowrap">
@@ -28,7 +29,7 @@ const TableRow = ({ job, handleDelete }) => {
             className="px-3 py-1 rounded-full text-blue-500 bg-blue-100/60
                               text-xs"
           >
-            Web Development
+            {category}
           </p>
         </div>
       </td>
@@ -37,7 +38,7 @@ const TableRow = ({ job, handleDelete }) => {
         title=""
         className="px-4 py-4 text-sm text-gray-500  whitespace-nowrap"
       >
-        Lorem ipsum, dolor si adipisicing elit. Ex, provident?..
+       {description}
       </td>
 
       <td className="px-4 py-4 text-sm whitespace-nowrap">

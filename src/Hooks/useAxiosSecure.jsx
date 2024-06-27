@@ -7,6 +7,7 @@ const axiosSecure = axios.create({
 
 const useAxiosSecure = () => {
   const { logOut } = useAuth();
+  
   axiosSecure.interceptors.response.use(
     res => {
       console.log('log from intercheptor');
@@ -16,8 +17,10 @@ const useAxiosSecure = () => {
       if (error.response.status === 401 || error.response.status === 403) {
         logOut();
       }
+      return Promise.reject(error);
     }
   );
+  // returning  axiossecure => 
   return axiosSecure;
 };
 export default useAxiosSecure;
