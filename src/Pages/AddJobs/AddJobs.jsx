@@ -3,9 +3,11 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import toast from 'react-hot-toast';
 import { CredContext } from '../../Providers/AuthProvider/CredProvider';
-import server from '../../Hooks/axioxSecure';
+
 import { useNavigate } from 'react-router-dom';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 const AddJobs = () => {
+  const axiosSecure=useAxiosSecure();
   const navigate = useNavigate();
   const { user } = useContext(CredContext);
 
@@ -33,7 +35,7 @@ const AddJobs = () => {
     console.log(jobData);
 
     try {
-      const { data } = await server().post('/jobs', jobData);
+      const { data } = await axiosSecure.post('/jobs', jobData);
       if (data.insertedId) {
         toast.success('Success');
         navigate('/');

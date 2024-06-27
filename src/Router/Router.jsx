@@ -9,10 +9,11 @@ import AddJobs from '../Pages/AddJobs/AddJobs';
 import ErrorPage from '../Pages/NotFound/ErrorPage';
 import MyPostedJobs from '../Pages/MypostedJob/MypostedJob';
 import UpdateJob from '../Pages/Update/UpdateJob';
-import server from '../Hooks/axioxSecure';
+
 import PrivateRoute from './PrivateRoute';
 import MyBids from '../Pages/MyBids/MyBids';
 import BidRequests from '../Pages/BidRequest/BidRequest';
+import axios from 'axios';
 
 const router = createBrowserRouter([
   {
@@ -80,7 +81,8 @@ const router = createBrowserRouter([
             <UpdateJob />
           </PrivateRoute>
         ),
-        loader: ({ params }) => server().get(`/job/${params.id}`),
+        loader: ({ params }) =>
+          axios.get(`http://localhost:9000/job/${params.id}`),
       },
     ],
   },

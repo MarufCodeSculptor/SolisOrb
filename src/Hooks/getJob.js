@@ -1,7 +1,7 @@
-import server from './axioxSecure';
+import axios from 'axios';
 
 const getJob = async ({ params }) => {
-  const {data} = await server().get(`/job/${params.id}`);
+  const { data } = await axios.get(`http://localhost:9000/job/${params.id}`);
   return data;
 };
 export default getJob;

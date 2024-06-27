@@ -1,19 +1,19 @@
-import server from "./axioxSecure";
+import axios from 'axios';
 
- const proccessCookie= async (user)=>{
-     if (user.accessToken) {
-          try {
-            const { data } = await server().post(
-              `/user`,
-              { email: user?.email },
-              {
-                withCredentials: true,
-              }
-            );
-            console.log(`The token from server --->`, data);
-          } catch (err) {
-            console.log(err);
-          }
+const proccessCookie = async user => {
+  if (user.accessToken) {
+    try {
+      const { data } = await axios.post(
+        `http://localhost:9000/user`,
+        { email: user?.email },
+        {
+          withCredentials: true,
         }
+      );
+      console.log(`The token from  --->`, data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 };
 export default proccessCookie;

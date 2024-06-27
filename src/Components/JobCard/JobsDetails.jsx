@@ -1,12 +1,14 @@
 import { useContext, useState } from 'react';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import { CredContext } from '../../Providers/AuthProvider/CredProvider';
-import server from '../../Hooks/axioxSecure';
+
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import toast from 'react-hot-toast';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 const JobDetails = () => {
+  const axiosSecure=useAxiosSecure()
   const { user } = useContext(CredContext);
   const [startDate, setStartDate] = useState(new Date());
   const navigate = useNavigate();
@@ -47,7 +49,7 @@ const JobDetails = () => {
     };
 
     try {
-      const response = await server().post('/bids', bidData);
+      const response = await axiosSecure.post('/bids', bidData);
       console.log(response.data);
       if (response.data.acknowledged) {
         toast.success('bidding successfull');

@@ -3,10 +3,12 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { CredContext } from '../../Providers/AuthProvider/CredProvider';
 import { useLoaderData, useNavigate } from 'react-router-dom';
-import server from '../../Hooks/axioxSecure';
+
 import toast from 'react-hot-toast';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 const UpdateJob = () => {
+  const axiosSecure=useAxiosSecure();
   const { user } = useContext(CredContext);
   const { data } = useLoaderData();
   const navigate = useNavigate();
@@ -40,15 +42,14 @@ const UpdateJob = () => {
       min_price,
       buyer,
     };
-    //  sending update request to server =>
+    //  sending update request to  =>
     try {
-      const { data } = await server().put(`/job/${_id}`, updatedData);
+      const { data } = await axiosSecure.put(`/job/${_id}`, updatedData);
       console.log(data);
-      if(data.modifiedCount>0){
+      if (data.modifiedCount > 0) {
         toast.success('update success');
         navigate('/my-posted-jobs');
         form.reset();
-
       }
     } catch (err) {
       console.log(err);

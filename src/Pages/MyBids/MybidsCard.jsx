@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
-import server from '../../Hooks/axioxSecure';
+
 import toast from 'react-hot-toast';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 const MybidsCard = ({ bid, getData }) => {
+  const axiosSecure=useAxiosSecure();
   const { price, deadline, job_title, category, status, _id } = bid;
   const handleComplete = async (id, prevStatus, status) => {
     if (prevStatus === 'In Progress') {
       try {
-        const { data } = await server().patch(`/bid-seller/${id}`, { status });
+        const { data } = await axiosSecure.patch(`/bid-seller/${id}`, { status });
         if (data.modifiedCount) {
           getData();
           toast.success('Done !');

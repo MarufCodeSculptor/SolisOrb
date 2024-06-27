@@ -1,30 +1,41 @@
 import PropTypes from 'prop-types';
-import server from '../../Hooks/axioxSecure';
 import toast from 'react-hot-toast';
-const BidRequestCard = ({ request, getData }) => {
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+const BidRequestCard = ({ request}) => {
+  const axiosSecure = useAxiosSecure();
   const { job_title, email, deadline, price, category, status, _id } = request;
+
+  /* 
+  requirement for implementing useMutations for data muting or updating =>
+    have to import useMutation and useQueryClient 
+  */
+  const queryClient = useQueryClient();
+  const { mutateAsync } = useMutation({
+    mutationFn: async ({ id, status }) => {
+      const { data } = await axiosSecure.patch(`/bid-buyer/${id}`, { status });
+      return data;
+    },
+    onSuccess: () => {
+      console.log('wow data updated');
+      toast.success('data updated successfully');
+      // refresh ui for latest data
+      queryClient.invalidateQueries({ queryKey: ['bids'] });
+    },
+    mutationKey: ['accept-status'],
+  });
 
   const handleStatus = async (id, prevStatus, status) => {
     console.log(id, prevStatus, status);
-   
-    if( prevStatus ==='Rejected'){
-      return toast.error('You cannot accept to rejected one ')
+
+    if (prevStatus === 'Rejected') {
+      return toast.error('You cannot accept to rejected one ');
     }
     if (prevStatus === status) {
       return toast.error('No change in status.');
     }
-
-    try {
-      const { data } = await server().patch(`/bid-buyer/${id}`, { status });
-      console.log(data);
-      if (data.modifiedCount) {
-        getData();
-        toast.success(`Success! A new document was updated`);
-      }
-    } catch (err) {
-      console.log(err);
-      toast.error(err?.message);
-    }
+    mutateAsync({ id, status });
   };
 
   return (

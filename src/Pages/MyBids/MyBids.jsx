@@ -1,9 +1,11 @@
 import {useEffect, useState } from 'react';
-import server from '../../Hooks/axioxSecure';
+
 import MybidsCard from './MybidsCard';
 import useAuth from '../../Hooks/useAuth';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 const MyBids = () => {
+  const axiosSecure=useAxiosSecure();
   // const { user } = useContext(CredContext);
   const {user}=useAuth();
   console.log('coming from my bid',user);
@@ -11,7 +13,7 @@ const MyBids = () => {
 
   //  data  fetching func =->
   const getData = async () => {
-    const { data } = await server().get(`my-bids/${user?.email}`);
+    const { data } = await axiosSecure.get(`my-bids/${user?.email}`);
     setBids(data);
   };
 

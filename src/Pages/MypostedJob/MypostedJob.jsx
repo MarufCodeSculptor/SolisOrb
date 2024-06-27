@@ -2,15 +2,17 @@ import { useContext, useEffect, useState } from 'react';
 import { CredContext } from '../../Providers/AuthProvider/CredProvider';
 import TableRow from './TableRow';
 import toast from 'react-hot-toast';
-import server from '../../Hooks/axioxSecure';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
+
 
 const MyPostedJobs = () => {
+  const axiosSecure=useAxiosSecure();
   const [myJobs, setMyJobs] = useState([]);
   const { user, loading } = useContext(CredContext);
   //    data fetching function =>
   const getData = async () => {
     try {
-      const { data } = await server().get(`/jobs/${user?.email}`);
+      const { data } = await axiosSecure.get(`/jobs/${user?.email}`);
       setMyJobs(data);
     } catch (err) {
       console.log(err);
@@ -22,7 +24,7 @@ const MyPostedJobs = () => {
 
   const handleDelete = async id => {
     try {
-      const { data } = await server().delete(`/job/${id}`);
+      const { data } = await axiosSecure.delete(`/job/${id}`);
       if (data.deletedCount > 0) {
         getData();
         toast.success('deleted success');

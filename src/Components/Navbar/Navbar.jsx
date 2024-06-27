@@ -1,14 +1,16 @@
 import { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { CredContext } from '../../Providers/AuthProvider/CredProvider';
-import server from '../../Hooks/axioxSecure';
+
 import toast from 'react-hot-toast';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 const Navbar = () => {
+  const axiosSecure= useAxiosSecure();
   const { logOut, user } = useContext(CredContext);
   const handleLogout = async () => {
     try {
       await logOut();
-      const { data } = await server().get(`/logout`, { withCredentials: true });
+      const { data } = await axiosSecure.get(`/logout`, { withCredentials: true });
       console.log(data);
       toast.success('log out success');
     } catch (err) {

@@ -1,19 +1,37 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { CredContext } from '../../Providers/AuthProvider/CredProvider';
-import server from '../../Hooks/axioxSecure';
+
 import BidRequestCard from './BidRequestCard';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
+import { useQuery } from '@tanstack/react-query';
 
 const BidRequests = () => {
   const { user } = useContext(CredContext);
-  const [bidRequests, setBidRequest] = useState([]);
+  const { data, isLoading } = useQuery({
+    queryFn: () => getData(),
+    queryKey: ['bids'],
+    onSuccess: () => {
+      console.log('data fetched successfully');
+    },
+  });
+  console.log(data, 'from react query', isLoading);
+
+  const axiosSecure = useAxiosSecure();
+
   const getData = async () => {
-    const { data } = await server().get(`bid-request/${user?.email}`);
-    setBidRequest(data);
+    const { data } = await axiosSecure.get(`bid-request/${user?.email}`);
+    return data;
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  if (isLoading) {
+    return (
+      <>
+        <div className="min-h-screen flex items-center justify-center">
+          <h3 className="text-5xl font-bold">Still Laoding ......</h3>
+        </div>
+      </>
+    );
+  }
 
   return (
     <section className="container px-4 mx-auto pt-12">
@@ -21,7 +39,7 @@ const BidRequests = () => {
         <h2 className="text-lg font-medium text-gray-800 ">Bid Requests</h2>
 
         <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full ">
-          {bidRequests.length} Requests
+          {data.length} Requests
         </span>
       </div>
 
@@ -85,7 +103,7 @@ const BidRequests = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 ">
-                  {bidRequests.map(request => (
+                  {data.map(request => (
                     <BidRequestCard
                       key={request._id}
                       request={request}
