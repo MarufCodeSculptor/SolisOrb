@@ -1,14 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import JobCard from '../../Components/JobCard/JobCard';
+import { useState } from 'react';
 
 const AllJobs = () => {
   const axiosSecure = useAxiosSecure();
+  const [itemsPerpage, setItemsPerPage] = useState(3);
+  const [currentPage, setCurrentPage] = useState(1);
+  console.log(currentPage);
 
   const getJobsAndCount = async () => {
     try {
       const [jobsRes, countRes] = await Promise.all([
-        axiosSecure.get('/jobs'),
+        axiosSecure.get(`/all-jobs?page=${currentPage}&size=${itemsPerpage}`),
         axiosSecure('/jobs-count'),
       ]);
       return { jobs: jobsRes.data, counts: countRes.data };
@@ -17,7 +21,7 @@ const AllJobs = () => {
     }
   };
   //  tanstack query fetching data => => =>
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryFn: getJobsAndCount,
     queryKey: ['JobsAndCount'],
   });
@@ -30,17 +34,15 @@ const AllJobs = () => {
       </>
     );
   }
- 
 
-  
+  const handleCurrentPage = pageNumber => {
+    setCurrentPage(pageNumber);
+    refetch();
+  };
 
- 
-
-  const pageCountNumbers = Math.ceil(data.counts.count / 6);
+  const pageCountNumbers = Math.ceil(data.counts.count / itemsPerpage);
   const pageCountArray = [...Array(pageCountNumbers).keys()];
 
-
-  
   return (
     <div className="container px-6 py-10 mx-auto min-h-[calc(100vh-306px)] flex flex-col justify-between">
       <div>
@@ -118,8 +120,9 @@ const AllJobs = () => {
 
         {pageCountArray.map(btnNum => (
           <button
+            onClick={() => handleCurrentPage(btnNum + 1)}
             key={btnNum}
-            className={`hidden px-4 py-2 mx-1 transition-colors duration-300 transform  rounded-md sm:inline hover:bg-blue-500  hover:text-white`}
+            className={`hidden px-4 py-2 mx-1 transition-colors ${(btnNum+1)===currentPage ? 'bg-blue-500 text-white':''} duration-300 transform  rounded-md sm:inline hover:bg-blue-500  hover:text-white`}
           >
             {btnNum + 1}
           </button>

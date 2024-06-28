@@ -38,7 +38,8 @@ const AddJobs = () => {
       const { data } = await axiosSecure.post('/jobs', jobData);
       if (data.insertedId) {
         toast.success('Success');
-        navigate('/');
+        // navigate('/');
+        event.target.reset();
       }
     } catch (err) {
       console.log(err);

@@ -50,6 +50,7 @@ const UpdateJob = () => {
         toast.success('update success');
         navigate('/my-posted-jobs');
         form.reset();
+        
       }
     } catch (err) {
       console.log(err);

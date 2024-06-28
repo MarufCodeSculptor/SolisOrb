@@ -38,7 +38,7 @@ const TableRow = ({ job, handleDelete }) => {
         title=""
         className="px-4 py-4 text-sm text-gray-500  whitespace-nowrap"
       >
-       {description}
+       {description.substring(0,30)}...
       </td>
 
       <td className="px-4 py-4 text-sm whitespace-nowrap">
