@@ -1,11 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import JobCard from '../../Components/JobCard/JobCard';
-import { useState, useSyncExternalStore } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 
 const AllJobs = () => {
   const axiosSecure = useAxiosSecure();
+
   const [itemsPerpage, setItemsPerPage] = useState(3);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [sort, setSort] = useState('');
   const [filter, setFilter] = useState('');
@@ -17,7 +19,7 @@ const AllJobs = () => {
         axiosSecure.get(
           `/all-jobs?page=${currentPage}&size=${itemsPerpage}&filter=${filter}&sort=${sort}&search=${search}`
         ),
-        axiosSecure(`/jobs-count?filter=${filter}`),
+        axiosSecure(`/jobs-count?filter=${filter}&search=${search}`),
       ]);
       return { jobs: jobsRes.data, counts: countRes.data };
     } catch (error) {
@@ -53,11 +55,12 @@ const AllJobs = () => {
 
   const pageCountNumbers = Math.ceil(data.counts.count / itemsPerpage);
   const pageCountArray = [...Array(pageCountNumbers).keys()];
+  // Search => => =>
   const handleSearch = async e => {
     e.preventDefault();
-     await setSearch(e.target.search.value)
-     await refetch();
-
+    await setSearch(e.target.search.value);
+    await refetch();
+    await setCurrentPage(0);
   };
   return (
     <div className="container px-6 py-10 mx-auto min-h-[calc(100vh-306px)] flex flex-col justify-between">
