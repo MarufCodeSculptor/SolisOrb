@@ -1,14 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import JobCard from '../../Components/JobCard/JobCard';
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 const AllJobs = () => {
   const axiosSecure = useAxiosSecure();
 
+  // eslint-disable-next-line no-unused-vars
   const [itemsPerpage, setItemsPerPage] = useState(3);
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [sort, setSort] = useState('');
   const [filter, setFilter] = useState('');
   const [search, setSearch] = useState('');
@@ -33,9 +35,26 @@ const AllJobs = () => {
   });
 
   const handleReset = async () => {
-    await setFilter('');
-    await setSort('');
-    await refetch();
+    try {
+      await setSearch('');
+    } catch (error) {
+      toast.error(error);
+    }
+    //  second
+    try {
+      await setFilter('');
+    } catch (error) {
+      toast.error(error);
+    }
+    // third
+    try {
+      await setSort('');
+    } catch (error) {
+      toast.error(error);
+    }
+
+    refetch();
+    toast.success('button working');
   };
 
   if (isLoading) {
